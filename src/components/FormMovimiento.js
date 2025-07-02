@@ -1,3 +1,9 @@
+//Agrega al inicio las importaciones necesarias
+import FormatoImpresion from './FormatoImpresion';
+
+//Dentro del componenete FormMovimiento, añade un estado
+
+
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { TextField, Button, MenuItem, Select, InputLabel, FormControl, Box } from '@mui/material';
@@ -10,22 +16,24 @@ import { TIPOS_MOVIMIENTO, CATEGORIAS, TIPOS_PLAZA, PERIODOS_VACACIONES } from '
 export default function FormMovimiento({ agregarMovimiento, setMostrarFormulario }) {
   const { register, handleSubmit, formState: { errors } } = useForm();
   const [fecha, setFecha] = useState(new Date());
+  const [fechaFinal, setFechaFinal] = useState(new Date());
   const [tipoMovimiento, setTipoMovimiento] = useState('');
   const [mostrarPeriodoVacaciones, setMostrarPeriodoVacaciones] = useState(false);
   const [mostrarRiesgoVacaciones, setMostrarRiesgoVacaciones] = useState(false);
+  const [movimientoGuardado, setMovimientoGuardado] = useState(null);
 
   const onSubmit = (data) => {
     const movimiento = {
-      ...data,
-      fecha,
-      tipoMovimiento,
-      periodoVacaciones: data.periodoVacaciones || null,
-      riesgoVacaciones: data.riesgoVacaciones || null,
-      fechaRegistro: new Date().toISOString()
-    };
-    agregarMovimiento(movimiento);
-    setMostrarFormulario(false);
+    ...data,
+    fecha,
+    tipoMovimiento,
+    periodoVacaciones: data.periodoVacaciones || null,
+    riesgoVacaciones: data.riesgoVacaciones || null,
+    fechaRegistro: new Date().toISOString()
   };
+  agregarMovimiento(movimiento);
+  setMovimientoGuardado(movimiento);
+};
 
   const handleTipoMovimientoChange = (e) => {
     const value = e.target.value;
@@ -47,7 +55,7 @@ export default function FormMovimiento({ agregarMovimiento, setMostrarFormulario
 
       <TextField
         fullWidth
-        label="Número de Credencial"
+        label="Número del trabajador"
         {...register("credencial", { required: true })}
         error={!!errors.credencial}
         helperText={errors.credencial && "Este campo es requerido"}
@@ -88,9 +96,18 @@ export default function FormMovimiento({ agregarMovimiento, setMostrarFormulario
 
       <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={esLocale}>
         <DatePicker
-          label="Fecha del movimiento"
+          label="Fecha inicial del movimiento"
           value={fecha}
           onChange={(newValue) => setFecha(newValue)}
+          renderInput={(params) => <TextField {...params} fullWidth sx={{ mb: 2 }} />}
+        />
+      </LocalizationProvider>
+
+            <LocalizationProvider dateAdapter={AdapterDateFns} adapterLocale={esLocale}>
+        <DatePicker
+          label="Fecha final del movimiento"
+          value={fechaFinal}
+          onChange={(Value) => setFechaFinal(Value)}
           renderInput={(params) => <TextField {...params} fullWidth sx={{ mb: 2 }} />}
         />
       </LocalizationProvider>
@@ -153,6 +170,11 @@ export default function FormMovimiento({ agregarMovimiento, setMostrarFormulario
         <Button type="submit" variant="contained" color="primary">
           Guardar Movimiento
         </Button>
+            {movimientoGuardado && (
+        <Box sx={{ mt: 4 }}>
+            <FormatoImpresion movimiento={movimientoGuardado} />
+        </Box>
+        )}
       </Box>
     </Box>
   );
