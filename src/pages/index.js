@@ -3,13 +3,14 @@ import { auth } from '../firebase/config';
 import FormMovimiento from '../components/FormMovimiento';
 import ListaMovimientos from '../components/ListaMovimientos';
 import Navbar from '../components/Navbar';
-import { obtenerMovimientos, agregarMovimiento } from '@/services/movimientosService';
+import { obtenerMovimientos } from '@/services/movimientosService';
 import styles from '../styles/Home.module.css';
 import { obtenerMovimientosUsuario } from '../services/movimientosService';
+//import { agregarMovimiento } from './services/movimientosService'
 
-export default function ListaMovimientos() {
+export default function Home() {
   const [movimientos, setMovimientos] = useState([]);
-  //const [mostrarFormulario, setMostrarFormulario] = useState(false);
+  const [mostrarFormulario, setMostrarFormulario] = useState(false);
   const [cargando, setCargando] = useState(true);
 
   // Cargar los movimientos al iniciar la aplicación
@@ -58,9 +59,9 @@ export default function ListaMovimientos() {
     /*cargarMovimientos();
   }, []);*/
 
-  const agregarMovimiento = (nuevoMovimiento) => {
+ /* const agregarMovimiento = (nuevoMovimiento) => {
     setMovimientos([...movimientos, { ...nuevoMovimiento, id: Date.now() }]);
-  };
+  };*/
 
     const handleAgregarMovimiento = async (nuevoMovimiento) => {
     try {
@@ -72,9 +73,9 @@ export default function ListaMovimientos() {
     }
   };
 
-  if (cargando) {
+  /*if (cargando) {
     return <div className={styles.container}>Cargando...</div>;
-  }
+  }*/
 
   return (
     <div className={styles.container}>
@@ -84,16 +85,17 @@ export default function ListaMovimientos() {
         <h1>Unidad de Tecnologias de la Información - HRAEM</h1>
         
         <button 
-          onClick={() => setMostrarFormulario(!mostrarFormulario)}
           className={styles.button}
+          onClick={() => setMostrarFormulario(!mostrarFormulario)}
         >
-          {mostrarFormulario ? 'Ocultar Formulario' : 'Nuevo Movimiento'}
-        </button>
+          { mostrarFormulario ? 'Ocultar Formulario' : 'Nuevo Movimiento' }
+          </button>
 
         {mostrarFormulario && (
           <FormMovimiento 
             agregarMovimiento={agregarMovimiento} 
             setMostrarFormulario={setMostrarFormulario}
+            onClose={() => setMostrarFormulario(false)} 
           />
         )}
 

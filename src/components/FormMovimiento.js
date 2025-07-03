@@ -5,12 +5,10 @@ import { LocalizationProvider, DatePicker } from '@mui/x-date-pickers';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import esLocale from 'date-fns/locale/es';
 import { auth } from '../firebase/config';
-import { agregarMovimiento } from '../services/movimientosService';
-
 import { TIPOS_MOVIMIENTO, CATEGORIAS, TIPOS_PLAZA, PERIODOS_VACACIONES } from '../utils/constants';
-import { agregarMovimiento } from '../services/movimientosService';
+//import { agregarMovimiento } from './services/movimientosService';
 
-export default function FormMovimiento({ setMostrarFormulario }) {
+export default function FormMovimiento({ onClose }) {
   const { register,  formState: { errors } } = useForm();
   const [fecha, setFecha] = useState(new Date());
   const [tipoMovimiento, setTipoMovimiento] = useState('');
@@ -58,6 +56,7 @@ export default function FormMovimiento({ setMostrarFormulario }) {
   };
 
   return (
+    
     <Box component="form" onSubmit={handleSubmit(onSubmit)} sx={{ mt: 3 }}>
       <TextField
         fullWidth
@@ -178,6 +177,20 @@ export default function FormMovimiento({ setMostrarFormulario }) {
         </Button>
       </Box>
     </Box>
+  );  
+  };
+  return (
+    <div className="form-container">
+      <Box component="form" onSubmit={handleSubmit} sx={{ mt: 3 }}>
+        {/* Aquí va el contenido del formulario */}
+        <button 
+          type="button" 
+          onClick={onClose}
+          className="cancel-button"
+        >
+          Cancelar
+        </button>
+      </Box>
+    </div>
   );
-}
 }

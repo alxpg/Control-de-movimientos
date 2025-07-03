@@ -1,5 +1,5 @@
 import { db } from '../firebase/config';
-import {  collection,   addDoc,   getDocs,   query, where,  orderBy,  where,  serverTimestamp } from 'firebase/firestore';
+import {  collection,   addDoc,   getDocs,   query,  orderBy,  where,  serverTimestamp } from 'firebase/firestore';
 
 export const obtenerMovimientosUsuario = async () => {
   if (!auth.currentUser) {
