@@ -48,3 +48,7 @@ export default function ShiftSelector({
             </label>
           </div>
         ))}
+              </div>
+            </div>
+          );
+      }
