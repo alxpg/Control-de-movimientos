@@ -3,12 +3,13 @@ import { getFirestore } from 'firebase/firestore';
 import { getAuth } from 'firebase/auth';
 
 const firebaseConfig = {
-  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
-  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
-  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
-  storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
-  messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
-  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID
+  apiKey: "AIzaSyAJDK9ImtmUmxWdx56RO_dfIoioq3pIN0Y",
+  authDomain: "sicom-a375e.firebaseapp.com",
+  projectId: "sicom-a375e",
+  storageBucket: "sicom-a375e.firebasestorage.app",
+  messagingSenderId: "322436830470",
+  appId: "1:322436830470:web:773ac112e49e140a4afa87",
+  measurementId: "G-YT5XRVD6JT"
 };
 
 const app = initializeApp(firebaseConfig);

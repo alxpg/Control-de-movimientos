@@ -1,8 +1,9 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { addDoc, collection } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
-import CalendarInput from '../ui/CalendarInput';
-import ShiftSelector from '../ui/ShiftSelector';
+import CalendarInput from '@/components/ui/CalendarInput';
+import ShiftSelector from '@/components/ui/ShiftSelector';
+
 
 export default function PermisoForm() {
   const [formData, setFormData] = useState({
@@ -23,6 +24,7 @@ export default function PermisoForm() {
     diaDevolucion: '',
     tipoPermiso: ''
   });
+  const [selectedShift, setSelectedShift] = useState<string>('');
 
   function generateFolio() {
     const date = new Date();
@@ -54,10 +56,17 @@ export default function PermisoForm() {
       </div>
       
       <ShiftSelector 
+    value={selectedShift}
+    onChange={setSelectedShift}
+    label="Seleccione su turno"
+    className="mb-4"
+  />
+  
+      {/*<ShiftSelector 
         value={formData.turno}
         onChange={(value) => setFormData({...formData, turno: value})}
-      />
-      
+      />      */}
+
       <CalendarInput 
         label="Fecha Inicial"
         value={formData.fechaInicial}
