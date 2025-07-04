@@ -17,10 +17,10 @@
     "date-fns": "^4.1.0",
     "firebase": "^11.10.0",
     "firebase-admin": "^12.7.0",
-    "next": "15.3.5",
+    "next": "^15.3.5",
     "next-auth": "^4.24.11",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
     "react-hook-form": "^7.59.0"
   },
   "devDependencies": {

@@ -1,3 +1,5 @@
+'use client'; // Añade esto en la primera línea
+
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 
