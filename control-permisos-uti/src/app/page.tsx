@@ -9,7 +9,7 @@ export default async function LoginPage() {
 
   // Si el usuario ya está autenticado, redirigir al dashboard
   if (session) {
-    redirect('/dashboard');
+    redirect('./app/dashboard');
   }
 
   async function authenticate(formData: FormData): Promise<void> {
