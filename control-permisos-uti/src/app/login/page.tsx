@@ -15,7 +15,7 @@ export default function LoginPage() {
   if (user) {
     redirect('/dashboard');
   }
-
+  
   const handleLogin = async (formData: FormData) => {
     const email = formData.get('email') as string;
     const password = formData.get('password') as string;
@@ -26,10 +26,9 @@ export default function LoginPage() {
       console.error('Error de autenticación:', error);
     }
   };
-
-  return (
+  {/*return (
     <div className="min-h-screen flex items-center justify-center">
       <LoginForm authenticate={handleLogin} />
     </div>
-  );
+  );*/}
 }

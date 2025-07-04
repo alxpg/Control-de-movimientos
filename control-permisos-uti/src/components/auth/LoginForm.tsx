@@ -36,19 +36,9 @@ export default function LoginForm({ authenticate }: { authenticate: (formData: F
     }
 }
 
-  /*try {
-      await onLogin(email, password);
-      router.push('/dashboard');
-    } catch (err) {
-      setError('Credenciales incorrectas. Por favor intente nuevamente.');
-      console.error('Login error:', err);
-    } finally {
-      setLoading(false);
-    }
-  };*/
-
-  return (
-    <div className="max-w-md w-full space-y-8">
+// Maneja el envío del formulario
+return (
+  <div className="max-w-md w-full space-y-8">
       <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
         Iniciar sesión
       </h2>
