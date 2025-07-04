@@ -2,8 +2,9 @@ import { redirect } from 'next/navigation';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import LoginForm from '@/components/auth/LoginForm';
+import { useRouter } from 'next/navigation';
 
-export default async function Home() {
+export default async function LoginPage() {
   const session = await getServerSession(authOptions);
 
   // Si el usuario ya está autenticado, redirigir al dashboard
@@ -11,8 +12,24 @@ export default async function Home() {
     redirect('/dashboard');
   }
 
+  async function authenticate(formData: FormData): Promise<void> {
+    'use server';
+    const email = formData.get('email')?.valueOf();
+    const password = formData.get('password')?.valueOf();
+
+    if (typeof email !== 'string' || typeof password !== 'string') {
+      throw new Error('Invalid form data');
+    }
+
+    // Aquí puedes agregar la lógica de autenticación si es necesario
+    // Por ejemplo, llamar a una API o manejar la autenticación
+    // Si la autenticación es exitosa, puedes redirigir al dashboard
+    // redirect('/dashboard');
+  }
+
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24 bg-gray-50">
+      <LoginForm authenticate={authenticate} />
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-blue-800">Hospital de la Mujer</h1>
@@ -21,11 +38,7 @@ export default async function Home() {
         </div>
         
         <div className="bg-white p-8 rounded-lg shadow-md">
-          <LoginForm onLogin={async (email: string, password: string) => {
-            // Implement your login logic here, e.g., call an API or handle authentication
-            // For now, just log the credentials (remove this in production)
-            console.log('Login attempt:', email, password);
-          }} />
+          <LoginForm authenticate={authenticate} />
         </div>
       </div>
     </main>

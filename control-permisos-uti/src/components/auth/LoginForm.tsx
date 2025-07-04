@@ -1,25 +1,42 @@
 'use client'; // Añade esto en la primera línea
 
 import { useState } from 'react';
+import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 
 interface LoginFormProps {
   onLogin: (email: string, password: string) => Promise<void>;
 }
 
-export default function LoginForm({ onLogin }: LoginFormProps) {
+export default function LoginForm({ authenticate }: { authenticate: (formData: FormData) => Promise<void> }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const router = useRouter();
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
+  const handleSubmit = async (formData: FormData) => {
+    await authenticate(formData);
     setError('');
-    
+    setLoading(true);
+
     try {
+      const result = await signIn('credentials', {
+        redirect: false,
+        email,
+        password,
+      });
+
+      if (result?.error) {
+        setError(result.error);
+      } else {
+        router.push('/dashboard');
+      }
+    } finally {
+      setLoading(false);
+    }
+}
+
+  /*try {
       await onLogin(email, password);
       router.push('/dashboard');
     } catch (err) {
@@ -28,14 +45,14 @@ export default function LoginForm({ onLogin }: LoginFormProps) {
     } finally {
       setLoading(false);
     }
-  };
+  };*/
 
   return (
     <div className="max-w-md w-full space-y-8">
       <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
         Iniciar sesión
       </h2>
-      <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
+      <form  className="mt-8 space-y-6" action={handleSubmit}>
         {error && (
           <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
             {error}

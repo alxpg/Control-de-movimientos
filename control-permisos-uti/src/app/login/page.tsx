@@ -1,7 +1,13 @@
 import LoginForm from '@/components/auth/LoginForm';
-import { login } from '@/lib/auth';
+import login from '@/lib/auth';
 import { redirect } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
+import React from 'react';
+
+interface LoginFormProps {
+  onLogin: (email: string, password: string) => Promise<void>;
+}
+
 
 export default function LoginPage() {
   const { user } = useAuth();
@@ -10,7 +16,9 @@ export default function LoginPage() {
     redirect('/dashboard');
   }
 
-  const handleLogin = async (email: string, password: string) => {
+  const handleLogin = async (formData: FormData) => {
+    const email = formData.get('email') as string;
+    const password = formData.get('password') as string;
     try {
       await login(email, password);
       redirect('/dashboard');
@@ -21,7 +29,7 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen flex items-center justify-center">
-      <LoginForm onLogin={handleLogin} />
+      <LoginForm authenticate={handleLogin} />
     </div>
   );
 }

@@ -1,29 +1,22 @@
-/*import { signInWithEmailAndPassword, signOut } from 'firebase/auth';
-import { auth } from './firebase';
-
-export async function login(email: string, password: string) {
-  try {
-    const userCredential = await signInWithEmailAndPassword(auth, email, password);
-    return userCredential.user;
-  } catch (error) {
-    console.error('Error al iniciar sesión:', error);
-    throw error;
-  }
-}
-
-export async function logout() {
-  try {
-    await signOut(auth);
-  } catch (error) {
-    console.error('Error al cerrar sesión:', error);
-    throw error;
-  }
-}*/
-
 import NextAuth, { getServerSession } from 'next-auth';
 import GoogleProvider from 'next-auth/providers/google';
 import { FirestoreAdapter } from '@auth/firebase-adapter';
-import { cert } from 'firebase-admin/app';
+import { cert, getApps, initializeApp } from 'firebase-admin/app';
+import { getAuth } from 'firebase-admin/auth';
+
+// Configuración principal de Firebase Admin
+const firebaseAdminConfig = {
+  credential: cert({
+    projectId: process.env.FIREBASE_ADMIN_PROJECT_ID,
+    clientEmail: process.env.FIREBASE_ADMIN_CLIENT_EMAIL,
+    privateKey: process.env.FIREBASE_ADMIN_PRIVATE_KEY?.replace(/\\n/g, '\n'),
+  }),
+};
+
+// Inicialización de Firebase Admin
+if (!getApps().length) {
+  initializeApp(firebaseAdminConfig);
+}
 
 export const authOptions = {
   providers: [
@@ -32,20 +25,18 @@ export const authOptions = {
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
     }),
   ],
-  adapter: FirestoreAdapter({
-    credential: cert({
-      projectId: process.env.FIREBASE_PROJECT_ID,
-      clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
-      privateKey: process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, '\n'),
-    }),
-  }),
+  adapter: FirestoreAdapter(firebaseAdminConfig),
   callbacks: {
-    async session({ session, user }: { session: import("next-auth").Session; user: import("next-auth").User }) {
-      (session.user as import("next-auth").User & { id?: string }).id = user.id;
+    async session({ session, user }: { session: any; user: any }) {
+      if (session?.user) {
+        session.user.id = user.id;
+      }
       return session;
     },
   },
+  secret: process.env.NEXTAUTH_SECRET,
 };
 
 export const getAuthSession = () => getServerSession(authOptions);
 export default NextAuth(authOptions);
+export const adminAuth = getAuth();
